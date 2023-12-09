@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "python-url-shortener"
+version = "0.1.0"
+description = ""
+authors = []
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+sanic = "^23.6.0"
+python-dotenv = "^1.0.0"
+aiosqlite = "^0.19.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.3"
+sanic-testing = "^23.6.0"
+pytest-asyncio = "^0.21.1"
+pytest-sanic = "^1.9.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pyright]
+reportUnknownVariableType = false
+reportUnknownMemberType = false
+reportMissingTypeStubs = false
+reportUnknownArgumentType = false

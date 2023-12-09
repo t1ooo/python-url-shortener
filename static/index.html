@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>URL Shortening Service</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+        margin: 0;
+        padding: 20px;
+      }
+
+      h1 {
+        color: #333;
+        text-align: center;
+      }
+
+      .container {
+        max-width: 500px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+      }
+
+      input[type="url"] {
+        width: 95%;
+        padding: 10px;
+        font-size: 16px;
+        border-radius: 3px;
+        border: 1px solid #ccc;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #333;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 3px;
+        transition: background-color 0.3s;
+      }
+
+      .btn:hover {
+        background-color: #555;
+      }
+
+      #result {
+        margin-top: 20px;
+        font-size: 16px;
+        color: #333;
+        display: none;
+      }
+
+      #error {
+        margin-top: 20px;
+        font-size: 16px;
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>URL Shortening Service</h1>
+    <div class="container">
+      <div class="form-group">
+        <label for="url-input">Enter URL:</label>
+        <input type="url" id="url-input" placeholder="Paste URL here" />
+      </div>
+      <button class="btn" onclick="shorten()">Shorten URL</button>
+      <div id="result">Short URL: <a href=""></a></div>
+      <div id="error"></div>
+    </div>
+
+    <script>
+      function setError(error) {
+        document.getElementById("error").textContent = error;
+      }
+
+      function setResult(url) {
+        const div = document.querySelector("#result");
+        if (url) {
+          const a = div.querySelector("a");
+          a.href = url;
+          a.textContent = url;
+          div.style.display = "block";
+        } else {
+          div.style.display = "none";
+        }
+      }
+
+      async function shorten() {
+        setError("");
+        setResult("");
+
+        var inputUrl = document.getElementById("url-input").value;
+        try {
+          const resp = await fetch("/api/shorten", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ url: inputUrl }),
+          });
+          const data = await resp.json();
+
+          console.log(data);
+          if (data.error) {
+            setError(data.error);
+          } else {
+            setResult(data.full_url);
+          }
+        } catch (error) {
+          setError("Something went wrong");
+          console.error("Error:", error);
+        }
+      }
+    </script>
+  </body>
+</html>
